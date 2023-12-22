@@ -18,31 +18,6 @@ public class App {
 
         List<Student> studentsList = studentService.getAllStudents();
         studentsList.stream().forEach(student -> LOGGER.info(student));
-
-
-//        ConnectionPool connectionPool = ConnectionPool.getInstance();
-//
-//        try{
-//            Connection connection = connectionPool.getConnection();
-//            PreparedStatement ps = connection.prepareStatement("insert into passports (number) values (?)", Statement.RETURN_GENERATED_KEYS);
-//            ps.setString(1, "123");
-//            ps.executeUpdate();
-//            Long id = 1L;
-//
-//            connection.commit();
-//        } catch (Exception e) {
-//            connection.rollback();
-//        } finally {
-//            connection.setAutoCommit(true);
-//        }
-//
-//
-//    public App() throws SQLException {
-//        }
-
-
-
-
     }
 
 }
