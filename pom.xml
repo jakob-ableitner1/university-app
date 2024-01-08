@@ -11,7 +11,8 @@
 
     <properties>
         <log4jVersion>2.21.1</log4jVersion>
-        <mysqlConnectorVersion>8.2.0</mysqlConnectorVersion>
+        <mysql-jdbc-version>8.2.0</mysql-jdbc-version>
+        <mybatis-version>3.5.15</mybatis-version>
     </properties>
 
     <dependencies>
@@ -28,7 +29,7 @@
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>${mysqlConnectorVersion}</version>
+            <version>${mysql-jdbc-version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -40,8 +41,11 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.14.0</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis-version}</version>
+        </dependency>
     </dependencies>
 
     <build>

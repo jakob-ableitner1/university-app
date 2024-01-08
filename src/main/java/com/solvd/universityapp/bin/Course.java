@@ -1,39 +1,31 @@
 package com.solvd.universityapp.bin;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 public class Course {
 
-    private long id;
-    private String professorName;
-    private String roomNumber;
+    private Long id;
     private CourseDetail courseDetail;
+    private Set<Professor> professors = new HashSet<>();
+    private Set<Time> times = new HashSet<>();
 
-    public Course() {
-    }
+    public Course(){}
 
-    public Course(long id, String professorName, String roomNumber, CourseDetail courseDetail) {
-        this.professorName = professorName;
-        this.roomNumber = roomNumber;
+    public Course(Long id, CourseDetail courseDetail,Set<Professor> professors, Set<Time> times) {
+        this.id = id;
         this.courseDetail = courseDetail;
+        this.professors = professors;
+        this.times = times;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public String getProfessorName() {
-        return professorName;
-    }
-
-    public void setProfessorName(String professorName) {
-        this.professorName = professorName;
-    }
-
-    public String getRoomNumber() {
-        return roomNumber;
-    }
-
-    public void setRoomNumber(String roomNumber) {
-        this.roomNumber = roomNumber;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public CourseDetail getCourseDetail() {
@@ -42,5 +34,54 @@ public class Course {
 
     public void setCourseDetail(CourseDetail courseDetail) {
         this.courseDetail = courseDetail;
+    }
+
+    public Set<Professor> getProfessors() {
+        return professors;
+    }
+
+    public void setProfessors(Set<Professor> professors) {
+        this.professors = professors;
+    }
+
+    public Set<Time> getTimes() {
+        return times;
+    }
+
+    public void setTimes(Set<Time> times) {
+        this.times = times;
+    }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", courseDetail=" + courseDetail +
+                ", professors=" + professors +
+                ", times=" + times +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Course course = (Course) o;
+
+        if (id != course.id) return false;
+        if (courseDetail != null ? !courseDetail.equals(course.courseDetail) : course.courseDetail != null)
+            return false;
+        if (professors != null ? !professors.equals(course.professors) : course.professors != null) return false;
+        return times != null ? times.equals(course.times) : course.times == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (courseDetail != null ? courseDetail.hashCode() : 0);
+        result = 31 * result + (professors != null ? professors.hashCode() : 0);
+        result = 31 * result + (times != null ? times.hashCode() : 0);
+        return result;
     }
 }

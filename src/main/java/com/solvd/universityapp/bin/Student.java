@@ -1,60 +1,85 @@
 package com.solvd.universityapp.bin;
 
+import java.util.Set;
+
 public class Student {
 
-    private long id;
-    private String first_name;
-    private String last_name;
-    private String major;
+    private Long id;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private DegreeProgram degreeProgram;
+    private Set<Course> courses;
+    private Set<TestResult> testResults;
 
-    public Student() {
-    }
+    public Student(){}
 
-    public Student(long id, String first_name, String last_name, String major) {
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.major = major;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getEmail() {
+        return email;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getMajor() {
-        return major;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setMajor(String major) {
-        this.major = major;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public DegreeProgram getDegreeProgram() {
+        return degreeProgram;
+    }
+
+    public void setDegreeProgram(DegreeProgram degreeProgram) {
+        this.degreeProgram = degreeProgram;
+    }
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+    }
+
+    public Set<TestResult> getTestResults() {
+        return testResults;
+    }
+
+    public void setTestResults(Set<TestResult> testResults) {
+        this.testResults = testResults;
     }
 
     @Override
     public String toString() {
         return "Student{" +
                 "id=" + id +
-                ", first_name='" + first_name + '\'' +
-                ", last_name='" + last_name + '\'' +
-                ", major='" + major + '\'' +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", degreeProgram=" + degreeProgram +
+                ", courses=" + courses +
+                ", testResults=" + testResults +
                 '}';
     }
 }

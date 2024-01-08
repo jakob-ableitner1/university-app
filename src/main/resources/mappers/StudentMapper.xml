@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.universityapp.dao.StudentRepository">
+
+    <insert id="create" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        Insert into students(email, first_name, last_name, degree_program_id) values (#{student.email}, #{student.firstName}, #{student.lastName}, #{degreeProgramId})
+    </insert>
+
+    <sql id="studentSelect">
+        Select
+            s.id as student_id, s.email as student_email, s.first_name as student_first_name, s.last_name as student_last_name,
+            dp.id as degree_program_id, dp.degree_program_name as degree_program_degree_program_name, dp.total_credits as degree_program_total_credits,
+            tr.id as test_result_id, tr.score as test_result_score, tr.subject as test_result_subject,
+            c.id as course_id,
+            cd.id as course_detail_id, cd.course_name as course_detail_course_name, cd.credits as course_detail_credits
+        from students s
+        left join test_results tr on s.id=tr.student_id
+        left join degree_programs dp on s.degree_program_id=dp.id
+        left join student_courses sc on s.id=sc.student_id
+        left join courses c on sc.course_id=c.id
+        left join course_details cd on c.course_detail_id=cd.id
+    </sql>
+
+    <select id="findById" resultMap="StudentResultMap">
+        <include refid="studentSelect"/>
+        where s.id = #{id}
+    </select>
+
+    <select id="findByEmail" resultMap="StudentResultMap">
+        <include refid="studentSelect"/>
+        where s.email = #{email}
+    </select>
+
+    <update id="updateById">
+        Update students set email=#{student.email}, first_name=#{student.firstName}, last_name=#{student.lastName}, degree_program_id=#{degreeProgramId} where id=#{studentId}
+    </update>
+
+    <delete id="deleteById">
+        Delete from students where id=#{id}
+    </delete>
+
+    <insert id="addCourse">
+        Insert into student_courses(student_id, course_id) values (#{studentId}, #{courseId})
+    </insert>
+
+    <delete id="removeCourse">
+        Delete from student_courses where student_id=#{studentId} and course_id=#{courseId}
+    </delete>
+
+    <resultMap id="StudentResultMap" type="com.solvd.universityapp.bin.Student" autoMapping="false">
+        <id column="student_id" property="id"/>
+        <result column="student_email" property="email"/>
+        <result column="student_first_name" property="firstName"/>
+        <result column="student_last_name" property="lastName"/>
+        <association property="degreeProgram" columnPrefix="degree_program_"
+                     resultMap="com.solvd.universityapp.dao.DegreeProgramRepository.DegreeProgramResultMap"/>
+        <collection property="courses" columnPrefix="course_"
+                    resultMap="com.solvd.universityapp.dao.CourseRepository.CourseResultMap"/>
+        <collection property="testResults" columnPrefix="test_result_"
+                    resultMap="com.solvd.universityapp.dao.TestResultRepository.TestResultResultMap"/>
+    </resultMap>
+</mapper>

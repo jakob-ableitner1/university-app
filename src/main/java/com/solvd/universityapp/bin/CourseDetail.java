@@ -2,23 +2,22 @@ package com.solvd.universityapp.bin;
 
 public class CourseDetail {
 
-    private long id;
+    private Long id;
     private String courseName;
     private int numberOfCredits;
-    private String departmentName;
 
     public CourseDetail() {
     }
 
-    public CourseDetail(long id, String courseName, int numberOfCredits, String departmentName) {
-        this.courseName = courseName;
-        this.numberOfCredits = numberOfCredits;
-        this.departmentName = departmentName;
+    public CourseDetail(Long id) {
+        this.id = id;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
+
+    public void setId(Long id){this.id = id;}
 
     public String getCourseName() {
         return courseName;
@@ -36,11 +35,27 @@ public class CourseDetail {
         this.numberOfCredits = numberOfCredits;
     }
 
-    public String getDepartmentName() {
-        return departmentName;
+    @Override
+    public String toString() {
+        return "CourseDetail{" +
+                "id=" + id +
+                ", courseName='" + courseName + '\'' +
+                ", numberOfCredits=" + numberOfCredits +
+                '}';
     }
 
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CourseDetail that = (CourseDetail) o;
+
+        return id != null ? id.equals(that.id) : that.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

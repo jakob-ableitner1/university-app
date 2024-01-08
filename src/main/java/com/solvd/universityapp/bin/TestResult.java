@@ -1,31 +1,35 @@
 package com.solvd.universityapp.bin;
 
+import org.apache.logging.log4j.core.config.plugins.util.ResolverUtil;
+
 public class TestResult {
 
-    private long id;
-    private int result;
+    private Long id;
+    private byte score;
     private String subject;
-    private Student student;
 
-    public TestResult() {
-    }
+    public TestResult(){}
 
-    public TestResult(long id, int result, String subject, Student student) {
-        this.result = result;
+    public TestResult(Long id, byte score, String subject) {
+        this.id = id;
+        this.score = score;
         this.subject = subject;
-        this.student = student;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public int getResult() {
-        return result;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setResult(int result) {
-        this.result = result;
+    public byte getScore() {
+        return score;
+    }
+
+    public void setScore(byte score) {
+        this.score = score;
     }
 
     public String getSubject() {
@@ -36,11 +40,27 @@ public class TestResult {
         this.subject = subject;
     }
 
-    public Student getStudent() {
-        return student;
+    @Override
+    public String toString() {
+        return "TestResult{" +
+                "id=" + id +
+                ", score=" + score +
+                ", subject='" + subject + '\'' +
+                '}';
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TestResult that = (TestResult) o;
+
+        return id != null ? id.equals(that.id) : that.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

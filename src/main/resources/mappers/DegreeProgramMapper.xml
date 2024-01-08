@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solvd.universityapp.dao.DegreeProgramRepository">
+
+    <insert id="create" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        Insert into degree_programs(degree_program_name, total_credits) values (#{degreeProgramName}, #{totalCredits})
+    </insert>
+
+    <select id="findById">
+        Select id, degree_program_name, total_credits from degree_programs where id = #{id}
+    </select>
+
+    <update id="updateById">
+        Update degree_programs set degree_program_name = #{degreeProgram.degreeProgramName}, total_credits = #{degreeProgram.totalCredits} where id = #{degreeProgramId}
+    </update>
+
+    <delete id="deleteById">
+        Delete from degree_programs where id = #{id}
+    </delete>
+
+    <resultMap id="DegreeProgramResultMap" type="com.solvd.universityapp.bin.DegreeProgram" autoMapping="false">
+        <id property="id" column="id"/>
+        <result property="degreeProgramName" column="degree_program_name"/>
+        <result property="totalCredits" column="total_credits"/>
+    </resultMap>
+</mapper>
