@@ -8,9 +8,11 @@ public class Student {
     private String email;
     private String firstName;
     private String lastName;
+    private Address address;
     private DegreeProgram degreeProgram;
     private Set<Course> courses;
     private Set<TestResult> testResults;
+
 
     public Student(){}
 
@@ -70,6 +72,14 @@ public class Student {
         this.testResults = testResults;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
@@ -77,6 +87,7 @@ public class Student {
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", address=" + address +
                 ", degreeProgram=" + degreeProgram +
                 ", courses=" + courses +
                 ", testResults=" + testResults +

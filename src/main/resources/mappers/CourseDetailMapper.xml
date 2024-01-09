@@ -5,7 +5,7 @@
 
     <resultMap id="CourseDetailResultMap" type="com.solvd.universityapp.bin.CourseDetail" autoMapping="false">
         <id property="id" column="id"/>
-        <id property="courseName" column="course_name"/>
-        <id property="numberOfCredits" column="credits"/>
+        <result property="courseName" column="course_name"/>
+        <result property="numberOfCredits" column="credits"/>
     </resultMap>
 </mapper>

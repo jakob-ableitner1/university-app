@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<termsList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="terms-list.xsd">
+    <term id="1">
+        <termName>Spring 2024</termName>
+        <startDate>2024-01-06</startDate>
+        <endDate>2024-05-24</endDate>
+    </term>
+    <term id="2">
+        <termName>Fall 2024</termName>
+        <startDate>2024-08-06</startDate>
+        <endDate>2024-12-24</endDate>
+    </term>
+</termsList>

@@ -1,19 +1,29 @@
 package com.solvd.universityapp;
 
-import com.solvd.universityapp.bin.DegreeProgram;
-import com.solvd.universityapp.bin.Student;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.solvd.universityapp.bin.*;
 import com.solvd.universityapp.menu.CreateNewStudentMenu;
 import com.solvd.universityapp.menu.IMenu;
 import com.solvd.universityapp.menu.RetrieveEmailMenu;
 import com.solvd.universityapp.service.CourseService;
 import com.solvd.universityapp.service.DegreeProgramService;
+import com.solvd.universityapp.service.StAXHandler;
 import com.solvd.universityapp.service.StudentService;
 import com.solvd.universityapp.service.impl.CourseServiceImpl;
 import com.solvd.universityapp.service.impl.DegreeProgramServiceImpl;
 import com.solvd.universityapp.service.impl.StudentServiceImpl;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.glassfish.jaxb.runtime.v2.runtime.JAXBContextImpl;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -35,7 +45,7 @@ public class App {
         boolean isLoopOpen = true;
 
         while(isLoopOpen){
-            LOGGER.info("sign in - 1, create new student - 2, delete student - 3, end program - 4");
+            LOGGER.info("sign in - 1, create new student - 2, delete student - 3, end program - 4, view building details - 5");
             int input = scanner.nextInt();
             scanner.nextLine();
 
@@ -58,6 +68,9 @@ public class App {
                     break;
                 case 4:
                     isLoopOpen = false;
+                    break;
+                case 5:
+                    viewBuildingAndRoomsDetails();
                     break;
             }
         }
@@ -113,7 +126,11 @@ public class App {
 
         while(isLoopOpen){
             LOGGER.info("Currently enrolled in the following courses. Id, Course Name, Credits");
-            student.getCourses().stream().forEach(course -> LOGGER.info(course.getId() + ", " + course.getCourseDetail().getCourseName() + ", " + course.getCourseDetail().getNumberOfCredits()));
+            student.getCourses().stream().forEach(course -> {
+                if (course.getId() != 0){
+                    LOGGER.info(course.getId() + ", " + course.getCourseDetail().getCourseName() + ", " + course.getCourseDetail().getNumberOfCredits());
+                }});
+
             LOGGER.info("Add course to student - 1, remove course from student - 2, back to student menu - 3");
 
             int input = scanner.nextInt();
@@ -121,7 +138,10 @@ public class App {
             switch(input){
                 case 1:
                     LOGGER.info("Enter course id that you would like to enroll for. Id, Course Name, Credits");
-                    courseService.findAll().stream().forEach(course -> LOGGER.info(course.getId() + ", " + course.getCourseDetail().getCourseName() + ", " + course.getCourseDetail().getNumberOfCredits()));
+                    courseService.findAll().stream().forEach(course ->{
+                        if(course.getId() != 0){
+                            LOGGER.info(course.getId() + ", " + course.getCourseDetail().getCourseName() + ", " + course.getCourseDetail().getNumberOfCredits());
+                        }});
                     Long courseIdInput = scanner.nextLong();
                     studentService.addCourse(student, courseIdInput);
                     break;
@@ -147,5 +167,16 @@ public class App {
         scanner.nextLine();
 
         return degreeProgramInput;
+    }
+
+    private static void viewBuildingAndRoomsDetails(){
+        File file = new File("src/main/resources/building.json");
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            Building building = mapper.readValue(file, Building.class);
+            LOGGER.info(building);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

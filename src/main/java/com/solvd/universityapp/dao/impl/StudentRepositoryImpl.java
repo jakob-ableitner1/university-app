@@ -16,10 +16,10 @@ public class StudentRepositoryImpl implements StudentRepository {
     private static final ConnectionPool CONNECTION_POOL = ConnectionPool.getInstance();
     private static final Logger LOGGER = LogManager.getLogger(StudentRepositoryImpl.class);
     private static final String SELECT_STATEMENT = "Select\n" +
-            "            s.id as student_id, s.email as student_email, s.first_name as student_first_name, s.last_name as student_last_name,\n" +
+            "            s.id as student_id, s.email as student_email, s.first_name as student_first_name, s.last_name as student_last_name, s.address_id as student_address_id,\n" +
             "            dp.id as degree_program_id, dp.degree_program_name as degree_program_name, dp.total_credits as degree_program_total_credits,\n" +
             "            tr.id as test_result_id, tr.score as test_result_score, tr.subject as test_result_subject,\n" +
-            "            c.id as course_id,\n" +
+            "            c.id as course_id, c.term_id as course_term_id,\n" +
             "            cd.id as course_detail_id, cd.course_name as course_name, cd.credits as course_credits\n" +
             "        from students s\n" +
             "        left join test_results tr on s.id=tr.student_id\n" +
@@ -162,6 +162,7 @@ public class StudentRepositoryImpl implements StudentRepository {
             student.setFirstName(rs.getString("student_first_name"));
             student.setLastName(rs.getString("student_last_name"));
             student.setDegreeProgram(new DegreeProgram(rs.getLong("degree_program_id"), rs.getString("degree_program_name"), rs.getShort("degree_program_total_credits")));
+            student.setAddress(new Address(rs.getLong("student_address_id")));
 
             Set<TestResult> testResults = new HashSet<>();
             Set<Course> courses = new HashSet<>();
@@ -185,9 +186,13 @@ public class StudentRepositoryImpl implements StudentRepository {
         courseDetail.setCourseName(rs.getString("course_name"));
         courseDetail.setNumberOfCredits(rs.getByte("course_credits"));
 
+        Term term = new Term();
+        term.setId(rs.getLong("course_term_id"));
+
         Course course = new Course();
         course.setId(rs.getLong("course_id"));
         course.setCourseDetail(courseDetail);
+        course.setTerm(term);
         courses.add(course);
 
         TestResult testResult = new TestResult();

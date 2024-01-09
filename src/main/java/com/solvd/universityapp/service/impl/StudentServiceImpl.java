@@ -3,6 +3,7 @@ package com.solvd.universityapp.service.impl;
 import com.solvd.universityapp.bin.Course;
 import com.solvd.universityapp.bin.DegreeProgram;
 import com.solvd.universityapp.bin.Student;
+import com.solvd.universityapp.bin.Term;
 import com.solvd.universityapp.bin.exception.StudentNotFoundException;
 import com.solvd.universityapp.dao.StudentRepository;
 import com.solvd.universityapp.dao.impl.StudentRepositoryImpl;
@@ -18,11 +19,10 @@ public class StudentServiceImpl implements StudentService {
 
     private static final Logger LOGGER = LogManager.getLogger(StudentServiceImpl.class);
 
-//    private StudentRepository studentRepository = new StudentRepositoryImpl();
-    private StudentRepository studentRepository = new StudentRepositoryMybatisImpl();
+    private StudentRepository studentRepository = new StudentRepositoryImpl();
+//    private StudentRepository studentRepository = new StudentRepositoryMybatisImpl();
 
     private DegreeProgramService degreeProgramService = new DegreeProgramServiceImpl();
-//    private TestResultService testResultService = new TestResultServiceImpl();
     private CourseService courseService = new CourseServiceImpl();
 
     @Override
@@ -37,12 +37,21 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student findByEmail(String email) {
-        return studentRepository.findByEmail(email).orElseThrow(() -> new StudentNotFoundException("student not found with email of " + email));
+        Student student = studentRepository.findByEmail(email).orElseThrow(() -> new StudentNotFoundException("student not found with email of " + email));
+        addXMLDataToStudent(student);
+        return student;
     }
 
     @Override
     public Student findById(Long id) {
-        return studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("student not found with id of " + id));
+        Student student = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("student not found with id of " + id));
+        addXMLDataToStudent(student);
+        return student;
+    }
+
+    private void addXMLDataToStudent(Student student){
+        student.setAddress(StAXHandler.findAddressById(student.getAddress().getId()));
+        student.getCourses().stream().forEach(course -> course.setTerm(JaxbHandler.findTermById(course.getTerm().getId())));
     }
 
 

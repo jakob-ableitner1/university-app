@@ -2,15 +2,14 @@ package com.solvd.universityapp.dao;
 
 import org.apache.ibatis.jdbc.ScriptRunner;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public class ConnectionPool {
@@ -19,11 +18,20 @@ public class ConnectionPool {
     private List<Connection> connections = new ArrayList<>();
 
     private ConnectionPool() {
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/university", "hbstudent", "hbstudent");
+
+        Properties prop = new Properties();
+        String propFileName = "config.properties";
+
+        try(InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName)){
+            if (inputStream != null) {
+                prop.load(inputStream);
+            } else {
+                throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
+            }
+            Class.forName(prop.getProperty("driver_name"));
+            Connection conn = DriverManager.getConnection(prop.getProperty("url"), prop.getProperty("username"), prop.getProperty("password"));
             connections.add(conn);
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (ClassNotFoundException | SQLException | IOException e) {
             System.out.println(e);
         }
     }

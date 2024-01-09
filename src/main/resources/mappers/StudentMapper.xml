@@ -9,11 +9,11 @@
 
     <sql id="studentSelect">
         Select
-            s.id as student_id, s.email as student_email, s.first_name as student_first_name, s.last_name as student_last_name,
+            s.id as student_id, s.email as student_email, s.first_name as student_first_name, s.last_name as student_last_name, s.address_id as student_address_id,
             dp.id as degree_program_id, dp.degree_program_name as degree_program_degree_program_name, dp.total_credits as degree_program_total_credits,
             tr.id as test_result_id, tr.score as test_result_score, tr.subject as test_result_subject,
             c.id as course_id,
-            cd.id as course_detail_id, cd.course_name as course_detail_course_name, cd.credits as course_detail_credits
+            cd.id as course_detail_id, cd.course_name as course_name, cd.credits as credits
         from students s
         left join test_results tr on s.id=tr.student_id
         left join degree_programs dp on s.degree_program_id=dp.id
@@ -55,6 +55,9 @@
         <result column="student_last_name" property="lastName"/>
         <association property="degreeProgram" columnPrefix="degree_program_"
                      resultMap="com.solvd.universityapp.dao.DegreeProgramRepository.DegreeProgramResultMap"/>
+        <association property="address">
+            <id property="id" column="student_address_id"/>
+        </association>
         <collection property="courses" columnPrefix="course_"
                     resultMap="com.solvd.universityapp.dao.CourseRepository.CourseResultMap"/>
         <collection property="testResults" columnPrefix="test_result_"

@@ -18,16 +18,6 @@ create table if not exists degree_programs(
     primary key (id)
 );
 
-create table if not exists addresses(
-	id serial,
-    street text not null,
-    city varchar(45) not null,
-    state varchar(45) not null,
-    country varchar(45) not null,
-    zip_code int unsigned not null,
-    primary key (id)
-);
-
 create table if not exists students(
 	id serial,
 	email varchar(45) unique not null,
@@ -36,7 +26,6 @@ create table if not exists students(
     degree_program_id bigint unsigned,
     address_id bigint unsigned,
     constraint fk_students_degree_program foreign key (degree_program_id) references degree_programs(id) on update no action on delete cascade,
-    constraint fk_students_address foreign key (address_id) references addresses (id) on update no action on delete no action,
     primary key (id)
 );
 
@@ -51,9 +40,9 @@ create table if not exists test_results(
 );
 
 create table if not exists buildings(
-	id bigint unsigned unique not null,
+	id serial,
     building_name varchar(45) unique not null,
-    constraint fk_building_address foreign key (id) references addresses (id) on update no action on delete cascade,
+    address_id bigint unsigned,
     primary key (id)
 );
 
@@ -86,21 +75,12 @@ create table if not exists course_details(
     primary key (id)
 );
 
-create table if not exists terms(
-	id serial,
-    term_name varchar(45) unique not null,
-    start_date date not null,
-    end_date date not null,
-    primary key (id)
-);
-
 create table if not exists courses(
 	id serial,
     course_detail_id bigint unsigned not null,
     term_id bigint unsigned,
     room_id bigint unsigned,
     constraint fk_course_course_details foreign key (course_detail_id) references course_details (id) on update no action on delete cascade,
-    constraint fk_course_term_id foreign key (term_id) references terms (id) on update no action on delete cascade,
     constraint fk_course_room_id foreign key (room_id) references rooms (id) on update no action on delete no action,
     primary key (id)
 );
@@ -134,13 +114,8 @@ create table if not exists course_times(
     constraint fk_course_times_course foreign key (course_id) references courses (id) on update no action on delete cascade
 );
 
-insert into addresses(street, city, state, country, zip_code) values
-('20 55th Ave', 'St. Paul', 'MN', 'USA', 443),
-('20 75th Ave', 'Minneapolis', 'MN', 'USA', 444),
-('20 95th Ave', 'Edina', 'MN', 'USA', 445);
-
-insert into buildings(id, building_name) values
-(3, 'Simpson Hall');
+insert into buildings(id, building_name, address_id) values
+(3, 'Simpson Hall', 3);
 
 insert into rooms(room_number, building_id) values
 ('101A', 3),
@@ -178,12 +153,10 @@ insert into course_details(course_name, credits, department_id) values
 ('How to Build an SQL Query', 2, 1),
 ('Business for Beginers', 3, 2);
 
-insert into terms(term_name, start_date, end_date) values ('Spring 2024', '2024-01-06', '2024-05-21');
-
 insert into courses(course_detail_id, term_id, room_id) values
 (1, 1, 3),
 (2, 1, 4),
-(3, 1, 3);
+(3, 2, 3);
 
 insert into course_professors(course_id, professor_id) values
 (1, 1),

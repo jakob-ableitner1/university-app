@@ -13,6 +13,8 @@
         <log4jVersion>2.21.1</log4jVersion>
         <mysql-jdbc-version>8.2.0</mysql-jdbc-version>
         <mybatis-version>3.5.15</mybatis-version>
+        <jaxb-version>4.0.4</jaxb-version>
+        <jackson-version>2.16.1</jackson-version>
     </properties>
 
     <dependencies>
@@ -46,6 +48,27 @@
             <artifactId>mybatis</artifactId>
             <version>${mybatis-version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>${jaxb-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>${jaxb-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

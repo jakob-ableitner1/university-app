@@ -8,17 +8,11 @@ public class Course {
 
     private Long id;
     private CourseDetail courseDetail;
+    private Term term;
     private Set<Professor> professors = new HashSet<>();
     private Set<Time> times = new HashSet<>();
 
     public Course(){}
-
-    public Course(Long id, CourseDetail courseDetail,Set<Professor> professors, Set<Time> times) {
-        this.id = id;
-        this.courseDetail = courseDetail;
-        this.professors = professors;
-        this.times = times;
-    }
 
     public Long getId() {
         return id;
@@ -52,11 +46,20 @@ public class Course {
         this.times = times;
     }
 
+    public Term getTerm() {
+        return term;
+    }
+
+    public void setTerm(Term term) {
+        this.term = term;
+    }
+
     @Override
     public String toString() {
         return "Course{" +
                 "id=" + id +
                 ", courseDetail=" + courseDetail +
+                ", term=" + term +
                 ", professors=" + professors +
                 ", times=" + times +
                 '}';

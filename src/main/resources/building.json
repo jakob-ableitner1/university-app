@@ -1,0 +1,14 @@
+{
+  "name": "Johnson Hall",
+  "addressId": 1,
+  "rooms": [
+    {
+      "id": 1,
+      "roomNumber": 201
+    },
+    {
+      "id": 2,
+      "roomNumber": 205
+    }
+  ]
+}
