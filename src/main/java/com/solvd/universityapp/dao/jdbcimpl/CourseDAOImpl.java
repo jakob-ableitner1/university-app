@@ -41,25 +41,18 @@ public class CourseDAOImpl implements CourseDAO {
         Connection conn = CONNECTION_POOL.getConnection();
 
         Optional<Course> course = null;
-        ResultSet rs = null;
 
         try (PreparedStatement ps =
                      conn.prepareStatement(String.format("%s where c.id=?", SELECT_STATEMENT))){
             ps.setLong(1, id);
-            rs = ps.executeQuery();
-            if(rs.next()){
-                course = Optional.ofNullable(createCourseFromResultSet(rs));
+            try (ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    course = Optional.ofNullable(createCourseFromResultSet(rs));
+                }
             }
         } catch (SQLException e){
             LOGGER.error(e);
         } finally {
-            try {
-                if (rs.next()){
-                    rs.close();
-                }
-            } catch (SQLException e) {
-                rs = null;
-            }
             CONNECTION_POOL.releaseConnection(conn);
         }
         return course;
@@ -71,23 +64,15 @@ public class CourseDAOImpl implements CourseDAO {
         Connection conn = CONNECTION_POOL.getConnection();
 
         Set<Course> courses = new HashSet<>();
-        ResultSet rs = null;
 
-        try (PreparedStatement ps = conn.prepareStatement(SELECT_STATEMENT)){
-            rs = ps.executeQuery();
+        try (PreparedStatement ps = conn.prepareStatement(SELECT_STATEMENT);
+             ResultSet rs = ps.executeQuery()){
             while(rs.next()){
                 courses.add(createCourseFromResultSet(rs));
             }
         } catch (SQLException e){
             LOGGER.error(e);
         } finally {
-            if(rs != null){
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    rs = null;
-                }
-            }
             CONNECTION_POOL.releaseConnection(conn);
         }
         return courses;

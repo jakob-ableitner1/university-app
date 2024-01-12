@@ -25,7 +25,8 @@ public class TestResultDAOImpl implements TestResultDAO {
             ps.setLong(3, studentId);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.info("Unable to create test result");
+            LOGGER.info(e);
         } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
@@ -34,29 +35,24 @@ public class TestResultDAOImpl implements TestResultDAO {
     @Override
     public Optional<TestResult> findTestResultById(Long id) {
         Connection conn = CONNECTION_POOL.getConnection();
-        ResultSet rs = null;
+
         TestResult testResult = null;
 
         try (PreparedStatement ps =
                      conn.prepareStatement("select id, score, subject from test_results where id=?")){
             ps.setLong(1, id);
-            rs = ps.executeQuery();
-            if(rs.next()){
-                testResult = new TestResult();
-                testResult.setId(rs.getLong("tr.id"));
-                testResult.setScore(rs.getByte("tr.score"));
-                testResult.setSubject(rs.getString("tr.subject"));
-            }
-        } catch (SQLException e){
-            LOGGER.error(e);
-        } finally {
-            if(rs != null){
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    rs = null;
+            try (ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    testResult = new TestResult();
+                    testResult.setId(rs.getLong("tr.id"));
+                    testResult.setScore(rs.getByte("tr.score"));
+                    testResult.setSubject(rs.getString("tr.subject"));
                 }
             }
+        } catch (SQLException e){
+            LOGGER.info("Unable to find test result");
+            LOGGER.info(e);
+        } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
         return Optional.ofNullable(testResult);
@@ -72,7 +68,8 @@ public class TestResultDAOImpl implements TestResultDAO {
             ps.setLong(3, id);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.info("Unable to update test result");
+            LOGGER.info(e);
         } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
@@ -86,7 +83,8 @@ public class TestResultDAOImpl implements TestResultDAO {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.info("Unable to delete test result");
+            LOGGER.info(e);
         } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }

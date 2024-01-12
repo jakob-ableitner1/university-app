@@ -12,11 +12,16 @@ import java.util.Properties;
 
 public class ServiceFactory {
 
-    private static String serviceImpl = "";
+    private final static String JDBC = "jdbc";
+    private final static String MYBATIS = "mybatis";
+
+    private static String serviceImpl;
 
     private static StudentService studentService;
     private static DegreeProgramService degreeProgramService;
     private static CourseService courseService;
+
+    private ServiceFactory(){}
 
     static {
         Properties prop = new Properties();
@@ -38,9 +43,9 @@ public class ServiceFactory {
         if (studentService != null){
             return studentService;
         }
-        if ("jdbc".equals(serviceImpl)){
+        if (JDBC.equals(serviceImpl)){
             studentService = new StudentServiceImpl();
-        } else if ("mybatis".equals(serviceImpl)){
+        } else if (MYBATIS.equals(serviceImpl)){
             studentService = new com.solvd.universityapp.service.mybatisimpl.StudentServiceImpl();
         } else {
             throw new RuntimeException();
@@ -52,12 +57,12 @@ public class ServiceFactory {
         if (degreeProgramService != null){
             return degreeProgramService;
         }
-        if ("jdbc".equals(serviceImpl)){
+        if (JDBC.equals(serviceImpl)){
             degreeProgramService = new DegreeProgramServiceImpl();
-        } else if ("mybatis".equals(serviceImpl)){
+        } else if (MYBATIS.equals(serviceImpl)){
             degreeProgramService = new com.solvd.universityapp.service.mybatisimpl.DegreeProgramServiceImpl();
         } else {
-            throw new RuntimeException();
+            throw new RuntimeException("Service implementation not recognized");
         }
         return degreeProgramService;
     }
@@ -66,17 +71,13 @@ public class ServiceFactory {
         if (courseService != null){
             return courseService;
         }
-        if ("jdbc".equals(serviceImpl)){
+        if (JDBC.equals(serviceImpl)){
             courseService = new CourseServiceImpl();
-        } else if ("mybatis".equals(serviceImpl)){
+        } else if (MYBATIS.equals(serviceImpl)){
             courseService = new com.solvd.universityapp.service.mybatisimpl.CourseServiceImpl();
         } else {
             throw new RuntimeException();
         }
         return courseService;
     }
-
-
-
-
 }

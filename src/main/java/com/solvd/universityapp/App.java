@@ -13,8 +13,6 @@ import com.solvd.universityapp.util.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -28,7 +26,6 @@ public class App {
 
     private static StudentService studentService = ServiceFactory.getStudentService();
     private static CourseService courseService = ServiceFactory.getCourseService();
-
 
     public static void main(String[] args) {
 

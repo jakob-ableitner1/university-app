@@ -24,7 +24,8 @@ public class CourseDetailDAOImpl implements CourseDetailDAO {
             ps.setLong(2, courseDetail.getNumberOfCredits());
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.info("Unable to create new course detail");
+            LOGGER.info(e);
         } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
@@ -35,27 +36,21 @@ public class CourseDetailDAOImpl implements CourseDetailDAO {
 
         Connection conn = CONNECTION_POOL.getConnection();
         CourseDetail courseDetail = null;
-        ResultSet rs = null;
 
         try (PreparedStatement ps = conn
                 .prepareStatement("select id, course_name, credits from course_details where id=?")){
             ps.setLong(1, id);
-            rs = ps.executeQuery();
-            if (rs.next()){
-                courseDetail = new CourseDetail(id);
-                courseDetail.setCourseName(rs.getString("course_name"));
-                courseDetail.setNumberOfCredits(rs.getByte("credits"));
-            }
-        } catch(SQLException e){
-            LOGGER.error(e);
-        } finally {
-            if(rs != null){
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    rs = null;
+            try (ResultSet rs = ps.executeQuery()){
+                if (rs.next()){
+                    courseDetail = new CourseDetail(id);
+                    courseDetail.setCourseName(rs.getString("course_name"));
+                    courseDetail.setNumberOfCredits(rs.getByte("credits"));
                 }
             }
+        } catch(SQLException e){
+            LOGGER.info("Unable to find course detail");
+            LOGGER.info(e);
+        } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
         return Optional.ofNullable(courseDetail);
@@ -71,7 +66,8 @@ public class CourseDetailDAOImpl implements CourseDetailDAO {
             ps.setLong(3, id);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.info("Unable to update course detail");
+            LOGGER.info(e);
         } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
@@ -85,7 +81,8 @@ public class CourseDetailDAOImpl implements CourseDetailDAO {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.info("Unable to delete course detail");
+            LOGGER.info(e);
         } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }

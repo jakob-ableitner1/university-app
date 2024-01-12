@@ -38,7 +38,8 @@ public class StudentDAOImpl implements StudentDAO {
             ps.setLong(4, degreeProgramId);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.info("Unable to create student");
+            LOGGER.info(e);
         } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
@@ -46,24 +47,20 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public Optional<Student> findById(Long id) {
+
         Connection conn = CONNECTION_POOL.getConnection();
         Optional<Student> student= null;
-        ResultSet rs = null;
+
         try (PreparedStatement ps =
                      conn.prepareStatement(String.format("%s where s.id=?", SELECT_STATEMENT))){
             ps.setLong(1, id);
-            rs = ps.executeQuery();
-            student = createStudentFromResultSet(rs);
-        } catch (SQLException e){
-            LOGGER.error(e);
-        } finally {
-            if(rs != null){
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    rs = null;
-                }
+            try (ResultSet rs = ps.executeQuery()) {
+                student = createStudentFromResultSet(rs);
             }
+        } catch (SQLException e){
+            LOGGER.info("Unable to find student");
+            LOGGER.info(e);
+        } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
         return student;
@@ -74,23 +71,17 @@ public class StudentDAOImpl implements StudentDAO {
 
         Connection conn = CONNECTION_POOL.getConnection();
         Optional<Student> student= null;
-        ResultSet rs = null;
 
         try (PreparedStatement ps =
                      conn.prepareStatement(String.format("%s where s.email=?", SELECT_STATEMENT))){
             ps.setString(1, email);
-            rs = ps.executeQuery();
-            student = createStudentFromResultSet(rs);
-        } catch (SQLException e){
-            LOGGER.error(e);
-        } finally {
-            try {
-                if (rs.next()){
-                    rs.close();
-                }
-            } catch (SQLException e) {
-                rs = null;
+            try (ResultSet rs = ps.executeQuery()) {
+                student = createStudentFromResultSet(rs);
             }
+        } catch (SQLException e){
+            LOGGER.info("Unable to find student");
+            LOGGER.info(e);
+        } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
         return student;
@@ -110,11 +101,11 @@ public class StudentDAOImpl implements StudentDAO {
             ps.setLong(5, studentId);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.info("Unable to update student");
+            LOGGER.info(e);
         } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
-
     }
 
     @Override
@@ -125,7 +116,8 @@ public class StudentDAOImpl implements StudentDAO {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.info("Unable to delete student");
+            LOGGER.info(e);
         } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
@@ -140,7 +132,8 @@ public class StudentDAOImpl implements StudentDAO {
             ps.setLong(2, courseId);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.info("Unable to add course to student");
+            LOGGER.info(e);
         } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
@@ -156,7 +149,8 @@ public class StudentDAOImpl implements StudentDAO {
             ps.setLong(2, courseId);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.info("Unable to delete course from student");
+            LOGGER.info(e);
         } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }

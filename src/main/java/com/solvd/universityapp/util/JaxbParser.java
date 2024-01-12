@@ -8,17 +8,14 @@ import jakarta.xml.bind.Unmarshaller;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
 public class JaxbParser {
 
     public static Term findTermById(Long id){
         List<Term> terms = getTermsList();
-        for(Term term : terms){
-            if(term.getId() == id){
-                return term;
-            }
-        }
-        return null;
+        Optional<Term> optTerm = terms.stream().filter(term -> term.getId() == id).findFirst();
+        return optTerm.isPresent() ? optTerm.get() : null;
     }
 
     public static List<Term> getTermsList(){

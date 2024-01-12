@@ -24,7 +24,8 @@ public class DegreeProgramDAOImpl implements DegreeProgramDAO {
             ps.setShort(2, degreeProgram.getTotalCredits());
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.info("Unable to create degree program");
+            LOGGER.info(e);
         } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
@@ -34,29 +35,23 @@ public class DegreeProgramDAOImpl implements DegreeProgramDAO {
     public Optional<DegreeProgram> findById(Long id) {
         Connection conn = CONNECTION_POOL.getConnection();
 
-        ResultSet rs = null;
         DegreeProgram degreeProgram = null;
 
         try (PreparedStatement ps =
                      conn.prepareStatement("select id, degree_program_name, total_credits from degree_programs where id=?")){
             ps.setLong(1, id);
-            rs = ps.executeQuery();
-            if(rs.next()){
-                degreeProgram = new DegreeProgram();
-                degreeProgram.setId(rs.getLong("id"));
-                degreeProgram.setDegreeProgramName(rs.getString("degree_program_name"));
-                degreeProgram.setTotalCredits(rs.getShort("total_credits"));
-            }
-        } catch (SQLException e){
-            LOGGER.error(e);
-        } finally {
-            if(rs != null){
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    rs = null;
+            try (ResultSet rs = ps.executeQuery()) {
+                if(rs.next()){
+                    degreeProgram = new DegreeProgram();
+                    degreeProgram.setId(rs.getLong("id"));
+                    degreeProgram.setDegreeProgramName(rs.getString("degree_program_name"));
+                    degreeProgram.setTotalCredits(rs.getShort("total_credits"));
                 }
             }
+        } catch (SQLException e){
+            LOGGER.info("Unable to find degree program");
+            LOGGER.info(e);
+        } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
         return Optional.ofNullable(degreeProgram);
@@ -67,11 +62,10 @@ public class DegreeProgramDAOImpl implements DegreeProgramDAO {
         Connection conn = CONNECTION_POOL.getConnection();
 
         Set<DegreeProgram> degreePrograms = new HashSet<>();
-        ResultSet rs = null;
 
         try (PreparedStatement ps = conn
-                .prepareStatement("select id, degree_program_name, total_credits from degree_programs")){
-            rs = ps.executeQuery();
+                .prepareStatement("select id, degree_program_name, total_credits from degree_programs");
+            ResultSet rs = ps.executeQuery()){
             while(rs.next()){
                 DegreeProgram degreeProgram = new DegreeProgram();
                 degreeProgram.setId(rs.getLong("id"));
@@ -80,15 +74,9 @@ public class DegreeProgramDAOImpl implements DegreeProgramDAO {
                 degreePrograms.add(degreeProgram);
             }
         } catch (SQLException e){
-            LOGGER.error(e);
+            LOGGER.info("Unable to find degree programs");
+            LOGGER.info(e);
         } finally {
-            if(rs != null){
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    rs = null;
-                }
-            }
             CONNECTION_POOL.releaseConnection(conn);
         }
         return degreePrograms;
@@ -105,7 +93,8 @@ public class DegreeProgramDAOImpl implements DegreeProgramDAO {
             ps.setLong(3, id);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.info("Unable to update degree program");
+            LOGGER.info(e);
         } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
@@ -119,7 +108,8 @@ public class DegreeProgramDAOImpl implements DegreeProgramDAO {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            LOGGER.info("Unable to delete degree program");
+            LOGGER.info(e);
         } finally {
             CONNECTION_POOL.releaseConnection(conn);
         }
