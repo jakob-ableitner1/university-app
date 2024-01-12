@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.solvd.universityapp.dao.DegreeProgramRepository">
+<mapper namespace="com.solvd.universityapp.dao.DegreeProgramDAO">
 
     <insert id="create" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
         Insert into degree_programs(degree_program_name, total_credits) values (#{degreeProgramName}, #{totalCredits})
     </insert>
 
-    <select id="findById">
+    <select id="findById" resultMap="DegreeProgramResultMap">
         Select id, degree_program_name, total_credits from degree_programs where id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="DegreeProgramResultMap">
+        Select id, degree_program_name, total_credits from degree_programs
     </select>
 
     <update id="updateById">

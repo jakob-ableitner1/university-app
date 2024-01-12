@@ -1,4 +1,4 @@
-package com.solvd.universityapp.service;
+package com.solvd.universityapp.util;
 
 import com.solvd.universityapp.bin.Address;
 
@@ -14,9 +14,8 @@ import javax.xml.stream.events.XMLEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Set;
 
-public class StAXHandler {
+public class StAXParser {
     public StringBuffer processXMLFile(File xmlFile){
 
         XMLEvent event = null;
@@ -51,7 +50,7 @@ public class StAXHandler {
 
     public static Address findAddressById(Long id) {
 
-        File file = new File("src/main/resources/addresses.xml");
+        File file = new File("src/main/resources/datastorage/addresses.xml");
         Address address = new Address(id);
         String currentElement = "";
         boolean hasMatchingId = false;

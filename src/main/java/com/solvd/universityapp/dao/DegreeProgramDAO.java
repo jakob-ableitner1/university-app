@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.Optional;
 import java.util.Set;
 
-public interface DegreeProgramRepository {
+public interface DegreeProgramDAO {
 
     void create(DegreeProgram degreeProgram);
 

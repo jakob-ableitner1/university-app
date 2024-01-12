@@ -1,6 +1,6 @@
 package com.solvd.universityapp;
 
-import com.solvd.universityapp.dao.ConnectionPool;
+import com.solvd.universityapp.util.ConnectionPool;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
 import java.io.FileNotFoundException;

@@ -13,9 +13,7 @@ public interface StudentService {
 
     Student findById(Long id);
 
-    void viewStudentInformation(Student student);
-
-    void editStudentDegreeProgram(Student student, Long degreeProgramId);
+    void updateStudentDegreeProgram(Student student, Long degreeProgramId);
 
     void addCourse(Student student, Long courseId);
 

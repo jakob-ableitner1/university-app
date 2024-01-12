@@ -1,4 +1,4 @@
-package com.solvd.universityapp.service;
+package com.solvd.universityapp.util;
 
 import com.solvd.universityapp.bin.Term;
 import com.solvd.universityapp.bin.TermsList;
@@ -9,7 +9,7 @@ import jakarta.xml.bind.Unmarshaller;
 import java.io.File;
 import java.util.List;
 
-public class JaxbHandler {
+public class JaxbParser {
 
     public static Term findTermById(Long id){
         List<Term> terms = getTermsList();
@@ -22,7 +22,7 @@ public class JaxbHandler {
     }
 
     public static List<Term> getTermsList(){
-        File file = new File("src/main/resources/terms-list.xml");
+        File file = new File("src/main/resources/datastorage/terms-list.xml");
 
         try {
             JAXBContext context = JAXBContext.newInstance(TermsList.class);

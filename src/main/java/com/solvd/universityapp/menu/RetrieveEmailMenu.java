@@ -10,8 +10,8 @@ public class RetrieveEmailMenu implements IMenu{
     private static final Logger LOGGER = LogManager.getLogger(RetrieveEmailMenu.class);
 
     @Override
-    public String[] getInput(Scanner scanner) {
+    public String getInput(Scanner scanner) {
         LOGGER.info("Enter email address of student");
-        return new String[]{scanner.nextLine()};
+        return scanner.nextLine();
     }
 }

@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.Optional;
 import java.util.Set;
 
-public interface CourseRepository {
+public interface CourseDAO {
 
     void create(@Param("course") Course course, @Param("courseDetailId") Long courseDetailId);
 

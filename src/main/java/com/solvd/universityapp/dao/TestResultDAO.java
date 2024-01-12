@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Optional;
 
-public interface TestResultRepository {
+public interface TestResultDAO {
 
     void create(@Param("testResult") TestResult testResult, @Param("studentId") Long studentId);
 

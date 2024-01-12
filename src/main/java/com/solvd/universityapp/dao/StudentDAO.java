@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Optional;
 
-public interface StudentRepository {
+public interface StudentDAO {
 
     void create(@Param("student") Student student, @Param("degreeProgramId") Long degreeProgramId);
 

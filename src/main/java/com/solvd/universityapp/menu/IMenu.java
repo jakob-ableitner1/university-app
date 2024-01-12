@@ -2,8 +2,8 @@ package com.solvd.universityapp.menu;
 
 import java.util.Scanner;
 
-public interface IMenu {
+public interface IMenu <T> {
 
-    String[] getInput(Scanner scanner);
+   T getInput(Scanner scanner);
 
 }

@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Optional;
 
-public interface CourseDetailRepository {
+public interface CourseDetailDAO {
 
     void create(CourseDetail courseDetail);
 

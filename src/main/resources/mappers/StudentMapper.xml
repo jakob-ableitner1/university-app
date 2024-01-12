@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.solvd.universityapp.dao.StudentRepository">
+<mapper namespace="com.solvd.universityapp.dao.StudentDAO">
 
-    <insert id="create" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+    <insert id="create" keyColumn="id" keyProperty="student.id" useGeneratedKeys="true">
         Insert into students(email, first_name, last_name, degree_program_id) values (#{student.email}, #{student.firstName}, #{student.lastName}, #{degreeProgramId})
     </insert>
 
@@ -12,7 +12,7 @@
             s.id as student_id, s.email as student_email, s.first_name as student_first_name, s.last_name as student_last_name, s.address_id as student_address_id,
             dp.id as degree_program_id, dp.degree_program_name as degree_program_degree_program_name, dp.total_credits as degree_program_total_credits,
             tr.id as test_result_id, tr.score as test_result_score, tr.subject as test_result_subject,
-            c.id as course_id,
+            c.id as course_id, c.term_id as course_term_id,
             cd.id as course_detail_id, cd.course_name as course_name, cd.credits as credits
         from students s
         left join test_results tr on s.id=tr.student_id
@@ -54,13 +54,13 @@
         <result column="student_first_name" property="firstName"/>
         <result column="student_last_name" property="lastName"/>
         <association property="degreeProgram" columnPrefix="degree_program_"
-                     resultMap="com.solvd.universityapp.dao.DegreeProgramRepository.DegreeProgramResultMap"/>
+                     resultMap="com.solvd.universityapp.dao.DegreeProgramDAO.DegreeProgramResultMap"/>
         <association property="address">
             <id property="id" column="student_address_id"/>
         </association>
-        <collection property="courses" columnPrefix="course_"
-                    resultMap="com.solvd.universityapp.dao.CourseRepository.CourseResultMap"/>
+        <collection property="courses"
+                    resultMap="com.solvd.universityapp.dao.CourseDAO.CourseResultMap"/>
         <collection property="testResults" columnPrefix="test_result_"
-                    resultMap="com.solvd.universityapp.dao.TestResultRepository.TestResultResultMap"/>
+                    resultMap="com.solvd.universityapp.dao.TestResultDAO.TestResultResultMap"/>
     </resultMap>
 </mapper>

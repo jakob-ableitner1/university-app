@@ -3,25 +3,16 @@ package com.solvd.universityapp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solvd.universityapp.bin.*;
 import com.solvd.universityapp.menu.CreateNewStudentMenu;
+import com.solvd.universityapp.menu.DegreeProgramMenu;
 import com.solvd.universityapp.menu.IMenu;
 import com.solvd.universityapp.menu.RetrieveEmailMenu;
 import com.solvd.universityapp.service.CourseService;
-import com.solvd.universityapp.service.DegreeProgramService;
-import com.solvd.universityapp.service.StAXHandler;
 import com.solvd.universityapp.service.StudentService;
-import com.solvd.universityapp.service.impl.CourseServiceImpl;
-import com.solvd.universityapp.service.impl.DegreeProgramServiceImpl;
-import com.solvd.universityapp.service.impl.StudentServiceImpl;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
+import com.solvd.universityapp.util.JSONMapper;
+import com.solvd.universityapp.util.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.glassfish.jaxb.runtime.v2.runtime.JAXBContextImpl;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -31,13 +22,13 @@ public class App {
 
     private static final Logger LOGGER = LogManager.getLogger(App.class);
 
-    private static CreateNewStudentMenu createNewStudentMenu = new CreateNewStudentMenu();
+    private static IMenu createNewStudentMenu = new CreateNewStudentMenu();
     private static IMenu retrieveEmailMenu = new RetrieveEmailMenu();
+    private static IMenu degreeProgramMenu = new DegreeProgramMenu();
 
-    private static StudentService studentService = new StudentServiceImpl();
-    private static DegreeProgramService degreeProgramService = new DegreeProgramServiceImpl();
-    private static CourseService courseService = new CourseServiceImpl();
-//    private static TestResultService testResultService = new TestResultServiceImpl();
+    private static StudentService studentService = ServiceFactory.getStudentService();
+    private static CourseService courseService = ServiceFactory.getCourseService();
+
 
     public static void main(String[] args) {
 
@@ -45,7 +36,7 @@ public class App {
         boolean isLoopOpen = true;
 
         while(isLoopOpen){
-            LOGGER.info("sign in - 1, create new student - 2, delete student - 3, end program - 4, view building details - 5");
+            LOGGER.info("sign in - 1, create new student - 2, delete student - 3, view building details - 4, end program - 5");
             int input = scanner.nextInt();
             scanner.nextLine();
 
@@ -54,23 +45,19 @@ public class App {
                     studentMenu(scanner);
                     break;
                 case 2:
-                    String[] studentInfo = createNewStudentMenu.getInput(scanner);
-                    Student student = new Student();
-                    student.setEmail(studentInfo[0]);
-                    student.setFirstName(studentInfo[1]);
-                    student.setLastName(studentInfo[2]);
-                    Long degreeProgramInput = getDegreeProgramInput(scanner);
+                    Student student = (Student) createNewStudentMenu.getInput(scanner);
+                    Long degreeProgramInput = (Long) degreeProgramMenu.getInput(scanner);
                     studentService.create(student, degreeProgramInput);
                     break;
                 case 3:
-                    String email = retrieveEmailMenu.getInput(scanner)[0];
+                    String email = (String) retrieveEmailMenu.getInput(scanner);
                     studentService.deleteByEmail(email);
                     break;
                 case 4:
-                    isLoopOpen = false;
+                    JSONMapper.viewBuildingAndRoomsDetails();
                     break;
                 case 5:
-                    viewBuildingAndRoomsDetails();
+                    isLoopOpen = false;
                     break;
             }
         }
@@ -80,23 +67,23 @@ public class App {
 
     private static void studentMenu(Scanner scanner){
 
-        String inputEmail = retrieveEmailMenu.getInput(scanner)[0];
+        String inputEmail = (String) retrieveEmailMenu.getInput(scanner);
         Student student = studentService.findByEmail(inputEmail);
         LOGGER.info("Viewing " + student.getFirstName() + ' ' + student.getLastName() + "'s account");
 
         IMenu studentOptionMenu = (lambdaScanner) -> {
             LOGGER.info("view student information - 1, change/add degree program - 2, add/remove course - 3, quit program - 4");
-            return new String[]{lambdaScanner.nextLine()};
+            return scanner.nextLine();
         };
 
         boolean quitStudentOptionLoop = false;
 
         while(!quitStudentOptionLoop){
-            String input = studentOptionMenu.getInput(scanner)[0];
+            String input = (String) studentOptionMenu.getInput(scanner);
 
             switch (input){
                 case "1":
-                    studentService.viewStudentInformation(student);
+                    LOGGER.info(student);
                     break;
                 case "2":
                     editStudentDegreeProgram(student, scanner);
@@ -113,12 +100,11 @@ public class App {
         }
     }
 
-
     private static void editStudentDegreeProgram(Student student, Scanner scanner){
         LOGGER.info("Current degree program: " + student.getDegreeProgram().getDegreeProgramName() + ". Enter degree program id to change to");
 
-        Long degreeProgramInput = getDegreeProgramInput(scanner);
-        studentService.editStudentDegreeProgram(student, degreeProgramInput);
+        Long degreeProgramInput = (Long) degreeProgramMenu.getInput(scanner);
+        studentService.updateStudentDegreeProgram(student, degreeProgramInput);
     }
 
     private static void editStudentCourses(Student student, Scanner scanner){
@@ -138,6 +124,7 @@ public class App {
             switch(input){
                 case 1:
                     LOGGER.info("Enter course id that you would like to enroll for. Id, Course Name, Credits");
+                    Set<Course> courses = courseService.findAll();
                     courseService.findAll().stream().forEach(course ->{
                         if(course.getId() != 0){
                             LOGGER.info(course.getId() + ", " + course.getCourseDetail().getCourseName() + ", " + course.getCourseDetail().getNumberOfCredits());
@@ -154,29 +141,6 @@ public class App {
                     isLoopOpen = false;
                     break;
             }
-        }
-    }
-
-    private static Long getDegreeProgramInput(Scanner scanner){
-        Set<DegreeProgram> degreePrograms = degreeProgramService.findDegreePrograms();
-        LOGGER.info("Available degree programs");
-        LOGGER.info("Degree Program Id, Degree Program Name, Total Credits");
-        degreePrograms.stream().forEach(degreeProgram -> LOGGER.info(degreeProgram.getId() + ", " + degreeProgram.getDegreeProgramName() + ", " + degreeProgram.getTotalCredits()));
-
-        Long degreeProgramInput = scanner.nextLong();
-        scanner.nextLine();
-
-        return degreeProgramInput;
-    }
-
-    private static void viewBuildingAndRoomsDetails(){
-        File file = new File("src/main/resources/building.json");
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            Building building = mapper.readValue(file, Building.class);
-            LOGGER.info(building);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }

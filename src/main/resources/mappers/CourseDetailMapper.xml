@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.solvd.universityapp.dao.CourseDetailRepository">
+<mapper namespace="com.solvd.universityapp.dao.CourseDetailDAO">
+
+    <select id="findById" resultMap="CourseDetailResultMap">
+        select id, course_name, credits from course_details where id=#{id}
+    </select>
 
     <resultMap id="CourseDetailResultMap" type="com.solvd.universityapp.bin.CourseDetail" autoMapping="false">
         <id property="id" column="id"/>
