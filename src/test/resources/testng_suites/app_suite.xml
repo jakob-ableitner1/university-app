@@ -1,0 +1,14 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Application Suite" verbose="1" parallel="methods" thread-count="10">
+
+    <test name="Service tests">
+        <classes>
+            <class name="com.solvd.universityapp.StudentServiceTest"/>
+            <class name="com.solvd.universityapp.CourseDetailServiceTest"/>
+            <class name="com.solvd.universityapp.CourseServiceTest"/>
+        </classes>
+    </test>
+
+</suite>

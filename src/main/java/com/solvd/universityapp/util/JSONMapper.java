@@ -2,7 +2,6 @@ package com.solvd.universityapp.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solvd.universityapp.bin.Building;
-import com.solvd.universityapp.menu.CreateNewStudentMenu;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

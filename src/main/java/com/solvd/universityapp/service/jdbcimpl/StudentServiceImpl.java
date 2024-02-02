@@ -6,8 +6,6 @@ import com.solvd.universityapp.bin.Student;
 import com.solvd.universityapp.bin.exception.StudentNotFoundException;
 import com.solvd.universityapp.dao.StudentDAO;
 import com.solvd.universityapp.dao.jdbcimpl.StudentDAOImpl;
-import com.solvd.universityapp.menu.CreateNewStudentMenu;
-import com.solvd.universityapp.menu.IMenu;
 import com.solvd.universityapp.service.*;
 import com.solvd.universityapp.util.JaxbParser;
 import com.solvd.universityapp.util.StAXParser;

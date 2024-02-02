@@ -1,6 +1,5 @@
 package com.solvd.universityapp;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solvd.universityapp.bin.*;
 import com.solvd.universityapp.menu.CreateNewStudentMenu;
 import com.solvd.universityapp.menu.DegreeProgramMenu;

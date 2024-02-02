@@ -1,6 +1,5 @@
 package com.solvd.universityapp.menu;
 
-import com.solvd.universityapp.App;
 import com.solvd.universityapp.bin.Student;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

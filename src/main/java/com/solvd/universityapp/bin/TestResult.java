@@ -1,7 +1,5 @@
 package com.solvd.universityapp.bin;
 
-import org.apache.logging.log4j.core.config.plugins.util.ResolverUtil;
-
 public class TestResult {
 
     private Long id;

@@ -2,9 +2,6 @@ package com.solvd.universityapp.service;
 
 import com.solvd.universityapp.bin.Student;
 
-import java.util.List;
-import java.util.Scanner;
-
 public interface StudentService {
 
     void create(Student student, Long degreeProgramId);

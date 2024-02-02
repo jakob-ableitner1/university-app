@@ -26,8 +26,10 @@ public class ConnectionPool {
                 throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
             }
             Class.forName(prop.getProperty("driver_name"));
-            Connection conn = DriverManager.getConnection(prop.getProperty("url"), prop.getProperty("username"), prop.getProperty("password"));
-            connections.add(conn);
+            for (int i = 0; i < 10; i++){
+                Connection conn = DriverManager.getConnection(prop.getProperty("url") + "?createDatabaseIfNotExist=true", prop.getProperty("username"), prop.getProperty("password"));
+                connections.add(conn);
+            }
         } catch (ClassNotFoundException | SQLException | IOException e) {
             System.out.println(e);
         }
